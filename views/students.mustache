@@ -8,17 +8,41 @@
 </head>
 <body>
 
-    <h1>Students</h1>
+ <h1>Students</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Student Code</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Date of Birth</th>
+                <th>Sex</th>
+            </tr>
+        </thead>
+        <tbody>
 
-    <pre>
-    List all the students here
-    </pre>
+            {{# items }}
+            <tr>
+                <td>{{ id }}</td>
+                <td>{{ student_code }}</td>
+                <td>{{ first_name }}</td>
+                <td>{{ last_name }}</td>
+                <td>{{ email }}</td>
+                <td>{{ date_of_birth }}</td>
+                <td>{{ sex }}</td>
+            </tr>
+            {{/ items }}
+        </tbody>
+    </table>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <hr />
-    <li><a href="/courses">List of courses</a></li>
-    <li><a href="/students">List of students</a></li>
+    <a href="/courses">List of courses</a>
+
 
 </body>
 </html>

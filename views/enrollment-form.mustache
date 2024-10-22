@@ -29,6 +29,11 @@
                     Students
                 </td>
                 <td>
+                    <select name="student_code">
+                    {{# students }}
+                    <option value="{{ student_code }}">{{ student_name }}</option>
+                    {{/ students }}
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -36,6 +41,7 @@
                     Enrolment Date
                 </td>
                 <td>
+                <input type="date" value={{ enrolment_date }}
                 </td>
             </tr>
             <tr>
