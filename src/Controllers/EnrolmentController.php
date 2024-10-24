@@ -13,7 +13,6 @@ class EnrolmentController extends BaseController
     {
         $courseObj = new Course();
         $studentObj = new Student();
-
         $template = 'enrollment-form';
         $data = [
             'courses' => $courseObj->all(),
@@ -25,14 +24,17 @@ class EnrolmentController extends BaseController
         return $output;
     }
 
+    
+
     public function enroll()
     {
         $course_code = $_POST['course_code'];
         $student_code = $_POST['student_code'];
         $enrolment_date = $_POST['enrolment_date'];
-        // Enroll Student to course
+
         $studentObj = new CourseEnrolment();
-        $this->$studentObj->enroll($student_code, $course_code, $enrolment_date);
+        $students = $studentObj->enroll($course_code, $student_code, $enrolment_date);
+
         
         header("Location: /courses/{$course_code}");
     }
