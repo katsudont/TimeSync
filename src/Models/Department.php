@@ -6,14 +6,25 @@ class Department extends BaseModel
 {
     public function getAll()
     {
-        $stmt = $this->db->query("SELECT ID, DepartmentName FROM Departments");
+        $query = "SELECT ID, DepartmentName FROM Department";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function count()
+    public function getById($id)
 {
-    $stmt = $this->db->query("SELECT COUNT(*) as count FROM Departments");
-    return $stmt->fetchColumn();
+    $query = "SELECT * FROM Department WHERE ID = :id";
+    $stmt = $this->db->prepare($query);
+    $stmt->execute(['id' => $id]); // Ensure 'id' matches ':id' in the query
+    return $stmt->fetch(\PDO::FETCH_ASSOC);
 }
+
+ // Count all departments
+ public function countAll()
+ {
+     $stmt = $this->db->query("SELECT COUNT(*) FROM Department");
+     return $stmt->fetchColumn();
+ }
 
 }

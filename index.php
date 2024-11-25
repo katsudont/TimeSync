@@ -15,13 +15,20 @@ try {
 
     $router->get('/', '\App\Controllers\LandingController@index');
 
-    $router->get('/register', '\App\Controllers\RegistrationController@showForm');
-    $router->post('/register', '\App\Controllers\RegistrationController@processForm');
+    $router->get('/register', '\App\Controllers\RegisterController@index');
+    $router->post('/register', '\App\Controllers\RegisterController@store');
 
-    $router->get('/login', '\App\Controllers\LoginController@showForm');
-    $router->post('/login', '\App\Controllers\LoginController@processForm');
+    $router->get('/login', '\App\Controllers\LoginController@login'); // Temporarily for testing
+    $router->post('/login', '\App\Controllers\LoginController@login');
 
-    $router->get('/admin-dashboard', '\App\Controllers\AdminController@showDashboard');
+    // Define the route for the dashboard page
+    $router->get('/admin-dashboard', '\App\Controllers\DashboardController@index');
+
+
+
+
+
+    
 
 
     // Run it!
