@@ -11,6 +11,9 @@ class DashboardController extends BaseController
 {
     public function index()
     {
+
+        session_start();
+        
         // Initialize models
         $attendanceModel = new Attendance();
         $employeeModel = new Employee();
@@ -26,10 +29,11 @@ class DashboardController extends BaseController
         $departmentCount = $departmentModel->countAll();
 
 
-        // if (isset($_SESSION['is_logged_in']) || !$_SESSION['is_logged_in']){
-        //     header('Location: /login');
-        //     exit;
-        // }
+        if (!isset($_SESSION['is_logged_in']) || !$_SESSION['is_logged_in']){
+            header('Location: /admin-dashboard');
+            exit;
+        }
+
         // Render the dashboard
 
         $data = [

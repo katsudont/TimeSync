@@ -6,6 +6,7 @@ use App\Models\User;
 
 class LoginController extends BaseController
 {
+
     protected $userModel;
 
     public function __construct()
@@ -15,6 +16,8 @@ class LoginController extends BaseController
 
     public function login()
     {
+        session_start();
+
         $username = $_POST['username'] ?? '';
         $password = $_POST['password'] ?? '';
 
@@ -34,11 +37,15 @@ class LoginController extends BaseController
             // Redirect based on role
             if ($user['role_id'] == 1) {
                 header('Location: /admin-dashboard');
-            } elseif ($user['role_id'] == 2) {
+            } 
+            
+            elseif ($user['role_id'] == 2) {
                 header('Location: /employee-dashboard');
             }
             exit();
-        } else {
+        } 
+        
+        else {
             // Increment login attempts and display error
             $_SESSION['login_attempts'] = ($_SESSION['login_attempts'] ?? 0) + 1;
 
