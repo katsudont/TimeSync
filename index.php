@@ -27,7 +27,52 @@ try {
     $router->get('/profile', '\App\Controllers\ProfileController@index');
     $router->post('/profile/update', '\App\Controllers\ProfileController@update');
 
-    $router->get('/employee', 'EmployeeController@index');
+    $router->get('/employee', '\App\Controllers\EmployeeController@index');
+
+
+    // Display the Admin Dashboard (List of Admin employees)
+    $router->get('/admin', '\App\Controllers\AdminController@index');
+
+    // Display the form to add a new Admin
+    $router->get('/admin/add', '\App\Controllers\AdminController@addAdmin'); // This is the route for `addAdmin.mustache`
+
+    // Store the new Admin data
+    $router->post('/admin/store', '\App\Controllers\AdminController@storeAdmin');
+
+    // Route to display departments
+    $router->get('/department', '\App\Controllers\DepartmentController@index');
+
+    // Route to show add department form
+    $router->get('/add-department', '\App\Controllers\DepartmentController@addDepartment');
+
+    // Route to handle form submission (POST)
+    $router->post('/add-department', '\App\Controllers\DepartmentController@addDepartment');
+
+    $router->get('/assign-shift/{departmentId}', '\App\Controllers\DepartmentController@assignShift');
+    $router->post('/assign-shift/{departmentId}', '\App\Controllers\DepartmentController@assignShift');
+
+    // Route to show shift list
+    $router->get('/shift', '\App\Controllers\ShiftController@index');
+
+    // Route to show the add shift form
+    $router->get('/add-shift', '\App\Controllers\ShiftController@add');
+
+    // Route to handle form submission for adding a new shift (POST)
+    $router->post('/add-shift', '\App\Controllers\ShiftController@add');
+
+    // Route to show the edit shift form (for a specific shift ID)
+    $router->get('/edit-shift/{shiftId}', '\App\Controllers\ShiftController@edit');
+
+    // Route to handle form submission for editing an existing shift (POST)
+    $router->post('/edit-shift/{shiftId}', '\App\Controllers\ShiftController@edit');
+
+    
+    
+
+
+
+
+
 
 
 

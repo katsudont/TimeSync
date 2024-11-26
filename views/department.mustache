@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Department - TimeSync</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background-color: #0A1128;
+      color: white;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .sidebar a:hover {
+      background-color: #1C3D6E;
+      border-radius: 4px;
+      padding: 8px;
+    }
+
+    .navbar {
+      background-color: #0A1128;
+      color: white;
+    }
+
+    .navbar-brand {
+      color: #FFD700;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+
+    .dropdown-menu {
+      background-color: #0A1128;
+      border: none;
+    }
+
+    .dropdown-item {
+      color: white;
+    }
+
+    .dropdown-item:hover {
+      background-color: #1C3D6E;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control[disabled] {
+      background-color: #e9ecef;
+    }
+
+    .edit-btn {
+      background-color: #1C3D6E;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .edit-btn:hover {
+      background-color: #FFD700;
+      color: #0A1128;
+    }
+
+    .save-btn {
+      background-color: #1C3D6E;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 15px;
+      width: 100%;
+    }
+
+    .save-btn:hover {
+      background-color: #FFD700;
+      color: #0A1128;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-12 col-md-3 col-lg-2 sidebar p-3 d-flex flex-column align-items-start">
+        <div class="mb-4 text-center w-100">
+          <img src="/path/to/logo.png" alt="Company Logo" class="img-fluid" style="max-width: 100px;">
+        </div>
+        <ul class="nav flex-column w-100">
+          <li class="nav-item">
+            <a href="/profile" class="nav-link py-2">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a href="/employee" class="nav-link py-2">Employee</a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin" class="nav-link py-2">Admin</a>
+          </li>
+          <li class="nav-item">
+            <a href="/department" class="nav-link py-2">Department</a>
+          </li>
+          <li class="nav-item">
+            <a href="/shift" class="nav-link py-2">Shift</a>
+          </li>
+          <li class="nav-item">
+            <a href="/attendance" class="nav-link py-2">Attendance</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Main Content -->
+      <main class="col-12 col-md-9 col-lg-10">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark px-3">
+          <a class="navbar-brand" href="/dashboard">TimeSync</a>
+          <div class="ms-auto dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+              {{username}}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+              <li><a class="dropdown-item" href="/profile">Profile</a></li>
+              <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Department List -->
+        <div class="card p-4 my-4">
+          <h3 class="text-center mb-4">Department List</h3>
+          <table id="departmentTable" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Department ID</th>
+                <th>Department Name</th>
+                <th>Shift Time In</th>
+                <th>Shift Time Out</th>
+                <th>Shift ID</th>
+                <th>Assign Shift</th> <!-- Added new column for Assigning Shift -->
+              </tr>
+            </thead>
+            <tbody>
+              {{#departments}}
+                <tr>
+                  <td>{{ID}}</td>
+                  <td>{{DepartmentName}}</td>
+                  <td>
+                    {{#Shifts}}
+                      {{TimeIn}}<br>
+                    {{/Shifts}}
+                  </td>
+                  <td>
+                    {{#Shifts}}
+                      {{TimeOut}}<br>
+                    {{/Shifts}}
+                  </td>
+                  <td>
+                    {{#Shifts}}
+                      {{ID}}<br> <!-- Added Shift ID -->
+                    {{/Shifts}}
+                  </td>
+                  <td>
+                    <a href="/assign-shift/{{ID}}" class="btn btn-warning">Assign Shift</a>
+                  </td>                  
+                </tr>
+              {{/departments}}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Add Department Button -->
+        <div class="text-center mt-4">
+          <a href="/add-department" class="btn btn-primary">Add Department</a>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- DataTables JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      // Initialize DataTables on the department table
+      $('#departmentTable').DataTable();
+    });
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

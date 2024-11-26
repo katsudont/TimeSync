@@ -25,4 +25,40 @@ public function countAll()
     return $stmt->fetchColumn();
 }
 
+ // Get employee details with department name
+ public function getEmployeeData()
+ {
+     $query = "
+         SELECT 
+             e.ID as EmployeeID, 
+             e.Name, 
+             e.Email, 
+             u.Username, 
+             e.Birthdate, 
+             e.HireDate, 
+             d.DepartmentName, 
+             e.DepartmentID
+         FROM Employee e
+         JOIN Department d ON e.DepartmentID = d.ID
+         JOIN User u ON u.EmployeeID = e.ID
+     ";
+
+     $stmt = $this->db->query($query);
+     return $stmt->fetchAll();
+ }
+
+ // Get employees by department
+ public function getEmployeesByDepartment($departmentId)
+ {
+     $sql = "SELECT e.ID, e.Name, e.Email, d.DepartmentName 
+             FROM employee e 
+             INNER JOIN department d ON e.DepartmentID = d.ID 
+             WHERE e.DepartmentID = ?";
+     $stmt = $this->db->prepare($sql);
+     $stmt->execute([$departmentId]);
+     return $stmt->fetchAll();
+ }
+
+
+
 }
