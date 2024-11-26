@@ -24,6 +24,13 @@ try {
     // Define the route for the dashboard page
     $router->get('/admin-dashboard', '\App\Controllers\DashboardController@index');
 
+    $router->get('/profile', '\App\Controllers\ProfileController@index');
+    $router->post('/profile/update', '\App\Controllers\ProfileController@update');
+
+    $router->get('/employee', 'EmployeeController@index');
+
+
+
 
 
 
