@@ -29,6 +29,27 @@ class Attendance extends BaseModel
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function getAllAttendance()
+{
+    $stmt = $this->db->prepare("
+        SELECT 
+            a.EmployeeID, 
+            e.Name as EmployeeName, 
+            d.DepartmentName, 
+            a.InTime, 
+            a.InStatus, 
+            a.OutTime, 
+            a.OutStatus,
+            a.ShiftID
+        FROM Attendance a
+        JOIN Employee e ON a.EmployeeID = e.ID
+        JOIN Department d ON a.DepartmentID = d.ID
+        ORDER BY a.InTime DESC
+    ");
+    $stmt->execute();
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC); // Return all attendance records
+}
+
     // Count present employees
     public function countPresent()
     {

@@ -66,6 +66,15 @@ try {
     // Route to handle form submission for editing an existing shift (POST)
     $router->post('/edit-shift/{shiftId}', '\App\Controllers\ShiftController@edit');
 
+    // Route to show attendance list
+    $router->get('/attendance', '\App\Controllers\AttendanceController@index');
+
+    // Route to export attendance to PDF
+    $router->get('/attendance/export', '\App\Controllers\AttendanceController@exportToPDF');
+
+
+
+
     
     
 
