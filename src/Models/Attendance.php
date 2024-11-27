@@ -50,6 +50,52 @@ class Attendance extends BaseModel
     return $stmt->fetchAll(\PDO::FETCH_ASSOC); // Return all attendance records
 }
 
+public function getFilteredAttendance($filters)
+{
+    $query = "
+        SELECT a.EmployeeID, e.Name as EmployeeName, d.DepartmentName, 
+               a.InTime, a.InStatus, a.OutTime, a.OutStatus, a.ShiftID 
+        FROM Attendance a
+        JOIN Employee e ON a.EmployeeID = e.ID
+        JOIN Department d ON a.DepartmentID = d.ID
+        WHERE 1=1
+    ";
+
+    // Add filtering conditions dynamically
+    if (!empty($filters['EmployeeID'])) {
+        $query .= " AND a.EmployeeID = :EmployeeID";
+    }
+    if (!empty($filters['EmployeeName'])) {
+        $query .= " AND e.Name LIKE :EmployeeName";
+    }
+    if (!empty($filters['DepartmentName'])) {
+        $query .= " AND d.DepartmentName LIKE :DepartmentName";
+    }
+    if (!empty($filters['ShiftID'])) {
+        $query .= " AND a.ShiftID = :ShiftID";
+    }
+
+    $stmt = $this->db->prepare($query);
+
+    if (!empty($filters['EmployeeID'])) {
+        $stmt->bindParam(':EmployeeID', $filters['EmployeeID']);
+    }
+    if (!empty($filters['EmployeeName'])) {
+        $stmt->bindValue(':EmployeeName', "%" . $filters['EmployeeName'] . "%");
+    }
+    if (!empty($filters['DepartmentName'])) {
+        $stmt->bindValue(':DepartmentName', "%" . $filters['DepartmentName'] . "%");
+    }
+    if (!empty($filters['ShiftID'])) {
+        $stmt->bindParam(':ShiftID', $filters['ShiftID']);
+    }
+
+    $stmt->execute();
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+}
+
+
+
     // Count present employees
     public function countPresent()
     {
