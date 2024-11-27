@@ -74,6 +74,12 @@ public function getFilteredAttendance($filters)
     if (!empty($filters['ShiftID'])) {
         $query .= " AND a.ShiftID = :ShiftID";
     }
+    if (!empty($filters['InStatus'])) {
+        $query .= " AND a.InStatus = :InStatus";
+    }
+    if (!empty($filters['OutStatus'])) {
+        $query .= " AND a.OutStatus = :OutStatus";
+    }
 
     $stmt = $this->db->prepare($query);
 
@@ -88,6 +94,12 @@ public function getFilteredAttendance($filters)
     }
     if (!empty($filters['ShiftID'])) {
         $stmt->bindParam(':ShiftID', $filters['ShiftID']);
+    }
+    if (!empty($filters['InStatus'])) {
+        $stmt->bindParam(':InStatus', $filters['InStatus']);
+    }
+    if (!empty($filters['OutStatus'])) {
+        $stmt->bindParam(':OutStatus', $filters['OutStatus']);
     }
 
     $stmt->execute();

@@ -18,7 +18,9 @@ class AttendanceController extends BaseController
             'EmployeeID' => $_GET['EmployeeID'] ?? null,
             'EmployeeName' => $_GET['EmployeeName'] ?? null,
             'DepartmentName' => $_GET['DepartmentName'] ?? null,
-            'ShiftID' => $_GET['ShiftID'] ?? null
+            'ShiftID' => $_GET['ShiftID'] ?? null,
+            'InStatus' => $_GET['InStatus'] ?? null,
+            'OutStatus' => $_GET['OutStatus'] ?? null
         ];
         
         // Get filtered records
@@ -38,6 +40,8 @@ class AttendanceController extends BaseController
         'EmployeeName' => $_GET['EmployeeName'] ?? null,
         'DepartmentName' => $_GET['DepartmentName'] ?? null,
         'ShiftID' => $_GET['ShiftID'] ?? null,
+        'InStatus' => $_GET['InStatus'] ?? null,
+        'OutStatus' => $_GET['OutStatus'] ?? null,
     ];
 
     $attendanceRecords = $attendanceModel->getFilteredAttendance($filters);
@@ -46,7 +50,7 @@ class AttendanceController extends BaseController
     $pdf = new FPDF('L', 'mm', 'A4');
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 14);
-    $pdf->Cell(290, 10, 'Attendance Summary', 0, 1, 'C');
+    $pdf->Cell(290, 10, 'Attendance Record', 0, 1, 'C');
     $pdf->Ln(10);
     $pdf->SetFont('Arial', 'B', 10);
 
@@ -72,7 +76,7 @@ class AttendanceController extends BaseController
         $pdf->Cell(30, 10, $record['ShiftID'], 1, 1, 'C');
     }
 
-    $pdf->Output('D', 'attendance_summary.pdf');
+    $pdf->Output('D', 'attendance_record.pdf');
 }
 
 
