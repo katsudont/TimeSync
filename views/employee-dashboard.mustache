@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard - TimeSync</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome to TimeSync, {{username}}</h1>
+        </header>
+
+        <!-- Employee Dashboard Content -->
+        <section class="dashboard">
+            <h2>Your Attendance</h2>
+            <div class="attendance-info">
+                <p><strong>Recent Attendance:</strong></p>
+                <ul>
+                    {{#recentAttendance}}
+                        <li>
+                            In Time: {{InTime}}, Out Time: {{OutTime}}, Status: {{InStatus}}/{{OutStatus}}
+                        </li>
+                    {{/recentAttendance}}
+                </ul>
+            </div>
+
+            <!-- Clock In/Out Buttons -->
+            <div class="clock-buttons">
+                <form action="/employee-dashboard/clockIn" method="POST">
+                    <button type="submit">Clock In</button>
+                </form>
+                
+                <form action="/employee-dashboard/clockOut" method="POST">
+                    <button type="submit">Clock Out</button>
+                </form>
+            </div>
+
+            <div class="dashboard-stats">
+                <p><strong>Total Employees:</strong> {{employeeCount}}</p>
+                <p><strong>Total Departments:</strong> {{departmentCount}}</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 TimeSync</p>
+    </footer>
+</body>
+</html>
