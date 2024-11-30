@@ -47,18 +47,13 @@ class Shift extends BaseModel
     // Method to assign a shift to a department (inserts into DepartmentShifts)
     public function assignShiftToDepartment($shiftId, $departmentId)
 {
-    // Step 1: Remove any previously assigned shift for this department
-    $sql = "DELETE FROM DepartmentShifts WHERE DepartmentID = ?";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute([$departmentId]);
-
-    // Step 2: Now assign the new shift to the department
+    // Insert the shift into the DepartmentShifts table
     $sql = "INSERT INTO DepartmentShifts (DepartmentID, ShiftID) VALUES (?, ?)";
     $stmt = $this->db->prepare($sql);
     $stmt->execute([$departmentId, $shiftId]);
-
-    return true; // Successfully assigned the new shift
+    return true; // Successfully assigned the new shift to the department
 }
+
 
 // Update an existing shift
 public function updateShift($shiftId, $timeIn, $timeOut)
