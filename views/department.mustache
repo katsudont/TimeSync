@@ -211,7 +211,7 @@
                   <td>{{#Shifts}}{{TimeIn}}<br>{{/Shifts}}</td>
                   <td>{{#Shifts}}{{TimeOut}}<br>{{/Shifts}}</td>
                   <td>{{#Shifts}}{{ID}}<br>{{/Shifts}}</td>
-                  <td><button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addShiftModal" data-shift-id="{{ID}}">Assign Shift</button></td>
+                  <td><button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#assignShiftModal" data-shift-id="{{ID}}">Assign Shift</button></td>
                 </tr>
               {{/departments}}
             </tbody>
@@ -221,7 +221,7 @@
     </div>
   </div>
 
-  <!-- Add Shift Modal -->
+  <!-- Add Shift Modal
   <div class="modal fade" id="addShiftModal" tabindex="-1" aria-labelledby="addShiftModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -251,7 +251,37 @@
         </div>
       </div>
     </div>
+  </div> -->
+
+
+  <!-- Assign Shift Modal -->
+<div class="modal fade" id="assignShiftModal" tabindex="-1" aria-labelledby="assignShiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="assignShiftModalLabel">Assign Shift to {{department.DepartmentName}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+          <div class="mb-3">
+            <label for="shiftId" class="form-label">Select Shift</label>
+            <select name="shiftId" id="shiftId" class="form-control" required>
+              <option value="">Select a shift</option>
+              {{#shifts}}
+                <option value="{{ID}}">{{ID}}: {{TimeIn}} - {{TimeOut}}</option>
+              {{/shifts}}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Assign Shift</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href="/department" class="btn btn-link">Back to Department List</a>
+      </div>
+    </div>
   </div>
+</div>
 
   <!-- Logout Modal -->
   <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">

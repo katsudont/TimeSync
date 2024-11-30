@@ -36,12 +36,13 @@ class Shift extends BaseModel
 
     // Method to create a shift
     public function create($data)
-    {
-        $sql = "INSERT INTO Shift (TimeIn, TimeOut) VALUES (?, ?)";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$data['TimeIn'], $data['TimeOut']]);
-        return $this->db->lastInsertId();
-    }
+{
+    $sql = "INSERT INTO Shift (TimeIn, TimeOut) VALUES (?, ?)";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$data['TimeIn'], $data['TimeOut']]);
+    return $this->db->lastInsertId();
+}
+
 
     // Method to assign a shift to a department (inserts into DepartmentShifts)
     public function assignShiftToDepartment($shiftId, $departmentId)

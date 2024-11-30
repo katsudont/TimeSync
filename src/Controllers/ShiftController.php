@@ -49,23 +49,27 @@ class ShiftController extends BaseController
 
     // Add a new shift
     public function add()
-    {
-        $shiftModel = new Shift();
+{
+    $shiftModel = new Shift();
 
-        // Check if it's a POST request to add the new shift
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $timeIn = $_POST['timeIn'];  // Get the TimeIn for the new shift
-            $timeOut = $_POST['timeOut']; // Get the TimeOut for the new shift
+    // Check if it's a POST request to add the new shift
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $timeIn = $_POST['timeIn'];  // Corrected: matches form input name
+        $timeOut = $_POST['timeOut']; // Corrected: matches form input name
 
-            // Insert the new shift
-            $shiftModel->create($timeIn, $timeOut);
+        // Insert the new shift by passing an associative array
+        $shiftModel->create([
+            'TimeIn' => $timeIn,
+            'TimeOut' => $timeOut
+        ]);
 
-            // Redirect back to the shift list
-            header('Location: /shift');
-            exit();
-        }
-
-        // Render the add shift form
-        $this->render('addShift');
+        // Redirect back to the shift list
+        header('Location: /shift');
+        exit();
     }
+
+    // Render the add shift form
+    $this->render('addShift');
+}
+
 }
