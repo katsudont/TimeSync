@@ -132,65 +132,104 @@ public function getFilteredAttendance($filters)
         return $stmt->fetchColumn();
     }
 
-    public function getEmployeeAttendanceForToday($employeeId)
-{
-    $stmt = $this->db->prepare("
-        SELECT * 
-        FROM Attendance 
-        WHERE EmployeeID = :employeeId AND DATE(InTime) = CURDATE()
-    ");
-    $stmt->bindParam(':employeeId', $employeeId);
-    $stmt->execute();
-    return $stmt->fetch(\PDO::FETCH_ASSOC); // Return attendance for today if any
-}
+    public function getAllAttendanceByEmployee($employeeId)
+    {
+        // Fetch all attendance records for the given employee, ordered by InTime (descending)
+        $stmt = $this->db->prepare("
+            SELECT shiftID, InTime, InStatus, OutTime, OutStatus 
+            FROM Attendance 
+            WHERE EmployeeID = :employeeId
+            ORDER BY InTime DESC
+        ");
+        $stmt->bindParam(':employeeId', $employeeId);
+        $stmt->execute();
+    
+        // Return the results as an associative array
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    
 
 public function recordTimeIn($employeeId)
 {
+    // Fetch the employee's department ID and the shift they are assigned to
     $stmt = $this->db->prepare("
-        INSERT INTO Attendance (EmployeeID, DepartmentID, ShiftID, InTime, InStatus)
-        SELECT :employeeId, e.DepartmentID, ds.ShiftID, NOW(), 'Present'
+        SELECT e.DepartmentID, ds.ShiftID, s.TimeIn 
         FROM Employee e
         JOIN DepartmentShifts ds ON e.DepartmentID = ds.DepartmentID
+        JOIN Shift s ON ds.ShiftID = s.ID
         WHERE e.ID = :employeeId
     ");
     $stmt->bindParam(':employeeId', $employeeId);
     $stmt->execute();
+    $shiftData = $stmt->fetch();
+
+    if ($shiftData) {
+        $departmentID = $shiftData['DepartmentID'];
+        $shiftID = $shiftData['ShiftID'];
+        $scheduledTimeIn = $shiftData['TimeIn']; // The scheduled start time of the shift
+
+        // Check if the employee clocked in late
+        $currentTime = date("H:i:s"); // Get current time
+
+        // Compare with scheduled TimeIn
+        if ($currentTime > $scheduledTimeIn) {
+            $inStatus = 'Late';
+        } else {
+            $inStatus = 'On Time';
+        }
+
+        // Record the clock-in time
+        $stmt = $this->db->prepare("
+            INSERT INTO Attendance (EmployeeID, DepartmentID, ShiftID, InTime, InStatus)
+            VALUES (:employeeId, :departmentID, :shiftID, NOW(), :inStatus)
+        ");
+        $stmt->bindParam(':employeeId', $employeeId);
+        $stmt->bindParam(':departmentID', $departmentID);
+        $stmt->bindParam(':shiftID', $shiftID);
+        $stmt->bindParam(':inStatus', $inStatus);
+        $stmt->execute();
+    }
 }
 
 public function recordTimeOut($employeeId)
 {
+    // Fetch the employee's department ID and the shift they are assigned to
     $stmt = $this->db->prepare("
-        UPDATE Attendance 
-        SET OutTime = NOW(), OutStatus = 'Completed' 
-        WHERE EmployeeID = :employeeId AND DATE(InTime) = CURDATE()
+        SELECT e.DepartmentID, ds.ShiftID, s.TimeOut 
+        FROM Employee e
+        JOIN DepartmentShifts ds ON e.DepartmentID = ds.DepartmentID
+        JOIN Shift s ON ds.ShiftID = s.ID
+        WHERE e.ID = :employeeId
     ");
     $stmt->bindParam(':employeeId', $employeeId);
     $stmt->execute();
-}
+    $shiftData = $stmt->fetch();
 
-// Fetch the latest attendance for a specific employee
-public function getLatestAttendanceByEmployee($employeeID, $limit = 5)
-{
-    $stmt = $this->db->prepare("
-        SELECT 
-            a.EmployeeID, 
-            e.Name as EmployeeName, 
-            d.DepartmentName, 
-            a.InTime, 
-            a.InStatus, 
-            a.OutTime, 
-            a.OutStatus 
-        FROM Attendance a
-        JOIN Employee e ON a.EmployeeID = e.ID
-        JOIN Department d ON a.DepartmentID = d.ID
-        WHERE a.EmployeeID = :employeeID
-        ORDER BY a.InTime DESC
-        LIMIT :limit
-    ");
-    $stmt->bindParam(':employeeID', $employeeID, \PDO::PARAM_INT);
-    $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    if ($shiftData) {
+        $departmentID = $shiftData['DepartmentID'];
+        $shiftID = $shiftData['ShiftID'];
+        $scheduledTimeOut = $shiftData['TimeOut']; // The scheduled end time of the shift
+
+        // Check if the employee clocked out late
+        $currentTime = date("H:i:s"); // Get current time
+
+        // Compare with scheduled TimeOut
+        if ($currentTime > $scheduledTimeOut) {
+            $outStatus = 'Late';
+        } else {
+            $outStatus = 'Completed';
+        }
+
+        // Update the clock-out time and status
+        $stmt = $this->db->prepare("
+            UPDATE Attendance 
+            SET OutTime = NOW(), OutStatus = :outStatus 
+            WHERE EmployeeID = :employeeId AND DATE(InTime) = CURDATE()
+        ");
+        $stmt->bindParam(':employeeId', $employeeId);
+        $stmt->bindParam(':outStatus', $outStatus);
+        $stmt->execute();
+    }
 }
 
 }

@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\Department;
-use App\Models\User;
 
 class EmployeeDashboardController extends BaseController
 {
@@ -27,8 +26,8 @@ class EmployeeDashboardController extends BaseController
         // Fetch the logged-in employee's ID
         $employeeID = $_SESSION['user_id'];
 
-        // Fetch the recent attendance of the logged-in employee
-        $recentAttendance = $attendanceModel->getLatestAttendanceByEmployee($employeeID);
+        // Fetch all attendance records of the logged-in employee
+        $attendanceRecords = $attendanceModel->getAllAttendanceByEmployee($employeeID);  // Updated method to fetch all records
         
         // Fetch additional statistics (if needed)
         $employeeCount = $employeeModel->countAll();
@@ -37,7 +36,7 @@ class EmployeeDashboardController extends BaseController
         // Prepare data for the view
         $data = [
             'username' => $_SESSION['username'] ?? 'Employee', // Set default value
-            'recentAttendance' => $recentAttendance,
+            'attendanceRecords' => $attendanceRecords,  // Updated key for all attendance records
             'employeeCount' => $employeeCount,
             'departmentCount' => $departmentCount,
         ];
@@ -58,9 +57,8 @@ class EmployeeDashboardController extends BaseController
         // Logic for clocking in
         $attendanceModel = new Attendance();
         $employeeID = $_SESSION['user_id']; // Assuming the employee's ID is stored in the session
-        $shiftID = 1; // Example shift, modify as needed
 
-        $attendanceModel->recordTimeIn($employeeID, $shiftID);
+        $attendanceModel->recordTimeIn($employeeID);
 
         // Redirect to dashboard after clocking in
         header('Location: /employee-dashboard');
