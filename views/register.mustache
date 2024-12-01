@@ -19,59 +19,66 @@
         }
 
         .form-container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
             padding: 2rem;
             border-radius: 15px;
             width: 100%;
             max-width: 500px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid #e0e0e0;
+            color: #2c3e50;
         }
 
         .form-container h3 {
             font-weight: bold;
             margin-bottom: 1.5rem;
+            color: #2c3e50;
+            text-align: center;
         }
 
         .form-container label {
             font-weight: bold;
+            color: #546e7a;
         }
 
         .btn-primary {
-            background-color: #0077b6;
+            background-color: #42a5f5;
             border: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .btn-primary:hover {
-            background-color: #005f9e;
+            background-color: #1e88e5;
+            box-shadow: 0 5px 15px rgba(66, 165, 245, 0.3);
         }
 
         .form-control,
         .form-select {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
+            background: #ffffff;
+            border: 1px solid #cfd8dc;
+            color: #2c3e50;
+            border-radius: 8px;
+            padding: 0.5rem;
         }
 
         .form-control:focus,
         .form-select:focus {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #0077b6;
-            color: white;
+            border-color: #42a5f5;
+            box-shadow: 0 0 5px rgba(66, 165, 245, 0.5);
         }
 
         .form-select option {
-            background: rgba(0, 17, 40, 1); /* Dark background for options */
-            color: white; /* Text color */
+            background: rgba(0, 17, 40, 1);
+            color: white;
         }
 
         .form-select option:hover {
-            background: rgba(0, 119, 182, 0.8); /* Highlighted background */
-            color: white; /* Text color */
+            background: rgba(0, 119, 182, 0.8);
+            color: white;
         }
 
         ::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(44, 62, 80, 0.7);
         }
     </style>
 </head>
