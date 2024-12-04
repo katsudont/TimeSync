@@ -66,7 +66,8 @@ public function login($username, $password)
     }
 
     public function updateProfile($userId, $name, $email, $username, $birthdate)
-    {
+{
+    try {
         $stmt = $this->db->prepare("
             UPDATE Employee e
             JOIN User u ON e.ID = u.EmployeeID
@@ -79,7 +80,16 @@ public function login($username, $password)
         $stmt->bindParam(':birthdate', $birthdate);
         $stmt->bindParam(':userId', $userId, \PDO::PARAM_INT);
 
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            return $stmt->rowCount(); // Rows affected
+        }
+    } catch (\PDOException $e) {
+        error_log("Update failed: " . $e->getMessage()); // Log the error
+        return false;
     }
+
+    return false;
+}
+
 
 }

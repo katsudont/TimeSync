@@ -148,131 +148,144 @@
       padding: 10px 20px; /* Some padding around the text */
       border-radius: 5px; /* Optional rounded corners */
     }
+
+      /* Target only inputs inside input-group with edit button */
+  .input-group .form-control {
+    flex: none; /* Prevent stretching */
+    width: 70%;  /* Set desired width */
+    max-width: 385px; /* Optional: limit max width */
+    margin-left: 75px;
+  }
+
+  .input-group .edit-btn {
+    flex: none;  /* Ensure button doesn't stretch */
+    margin-left: 10px;  /* Add spacing between input and button */
+  }
   </style>
 </head>
 <body>
   <div class="container-fluid">
     <div class="row">
       <!-- Sidebar -->
-      <div class="col-12 col-md-3 col-lg-2 sidebar p-3 d-flex flex-column align-items-start">
-        <div class="mb-4 text-center w-100">
-          <img src="/path/to/logo.png" alt="Company Logo" class="img-fluid" style="max-width: 100px;">
+      <div class="col-12 col-md-3 col-lg-2 sidebar p-3">
+        <div class="text-center mb-4">
+          <a href="/admin-dashboard">
+          <img src="/path/to/logo.png" alt="Logo" class="img-fluid" style="max-width: 100px;">
+         </a>
         </div>
-        <ul class="nav flex-column w-100">
+        <ul class="nav flex-column">
           <li class="nav-item">
-            <a href="/profile" class="nav-link py-2">
+            <a href="/profile" class="nav-link">
               <i class="fas fa-user-circle"></i> Profile
             </a>
           </li>
           <li class="nav-item">
-            <a href="/employee" class="nav-link py-2">
+            <a href="/employee" class="nav-link">
               <i class="fas fa-users"></i> Employee
             </a>
           </li>
           <li class="nav-item">
-            <a href="/admin" class="nav-link py-2">
+            <a href="/admin" class="nav-link">
               <i class="fas fa-user-shield"></i> Admin
             </a>
           </li>
           <li class="nav-item">
-            <a href="/department" class="nav-link py-2">
+            <a href="/department" class="nav-link">
               <i class="fas fa-building"></i> Department
             </a>
           </li>
           <li class="nav-item">
-            <a href="/shift" class="nav-link py-2">
+            <a href="/shift" class="nav-link">
               <i class="fas fa-calendar-alt"></i> Shift
             </a>
           </li>
           <li class="nav-item">
-            <a href="/attendance" class="nav-link py-2">
+            <a href="/attendance" class="nav-link">
               <i class="fas fa-clock"></i> Attendance
             </a>
           </li>
         </ul>
-        <button class="logout-btn mt-auto" onclick="showLogoutModal()">Logout</button>
+        <!-- Logout Button placed here -->
+        <button class="logout-btn" onclick="showLogoutModal()">Logout</button>
       </div>
 
       <!-- Main Content -->
       <main class="col-12 col-md-9 col-lg-10">
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark px-3">
-          <div class="container-fluid">
-            <!-- Removed TimeSync text -->
-            <a class="navbar-brand d-flex align-items-center" href="/dashboard">
-              <!-- TimeSync was here, now removed -->
-            </a>
-
-            <!-- User Name -->
-            <div class="ms-auto user-name">
-              Admin Alex
-            </div>
-          </div>
+        <nav class="navbar navbar-dark px-3">
+          <h3 class="text-center welcome-text">Welcome, {{username}}!</h3>
         </nav>
 
-        <!-- Profile Info -->
-        <div class="card p-4 my-4">
-          <!-- Profile Title with Style -->
-          <h3 class="text-center mb-4 profile-title">Profile</h3>
+        <div class="card mt-4">
+          <h3 class="text-center mb-4">Profile</h3>
 
-          <form id="profileForm">
+          <form id="profileForm" action="/profile/update" method="POST">
             <!-- Employee ID -->
             <div class="d-flex align-items-center mb-3">
-              <label class="form-label w-25">Employee ID</label>
-              <input type="text" class="form-control w-50" value="{{profile.EmployeeID}}" disabled>
+              <label for="employeeId" class="form-label w-25">Employee ID</label>
+              <input type="text" id="employeeId" name="employeeId" class="form-control w-25" value="{{profile.EmployeeID}}" disabled>
             </div>
 
-            <!-- Name -->
-            <div class="d-flex align-items-center mb-3">
-              <label class="form-label w-25">Name</label>
-              <input type="text" id="name" class="form-control w-50" value="{{profile.Name}}" disabled>
-              <!-- Edit Icon Button -->
-              <button type="button" class="edit-btn ms-2" onclick="enableField('name')"><i class="fas fa-pencil-alt"></i></button>
-            </div>
+              <!-- Name -->
+              <div class="d-flex align-items-center mb-3">
+                <label for="name" class="form-label w-25">Name</label>
+                <div class="input-group">
+                  <input type="text" id="name" name="name" class="form-control" value="{{profile.Name}}" disabled>
+                  <button type="button" class="btn edit-btn ms-2" onclick="enableField('name')">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                </div>
+              </div>
 
-            <!-- Email -->
-            <div class="d-flex align-items-center mb-3">
-              <label class="form-label w-25">Email</label>
-              <input type="email" id="email" class="form-control w-50" value="{{profile.Email}}" disabled>
-              <!-- Edit Icon Button -->
-              <button type="button" class="edit-btn ms-2" onclick="enableField('email')"><i class="fas fa-pencil-alt"></i></button>
-            </div>
+              <!-- Email -->
+              <div class="d-flex align-items-center mb-3">
+                <label for="email" class="form-label w-25">Email</label>
+                <div class="input-group">
+                  <input type="email" id="email" name="email" class="form-control" value="{{profile.Email}}" disabled>
+                  <button type="button" class="btn edit-btn ms-2" onclick="enableField('email')">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                </div>
+              </div>
 
-            <!-- Username -->
-            <div class="d-flex align-items-center mb-3">
-              <label class="form-label w-25">Username</label>
-              <input type="text" id="username" class="form-control w-50" value="{{profile.Username}}" disabled>
-              <!-- Edit Icon Button -->
-              <button type="button" class="edit-btn ms-2" onclick="enableField('username')"><i class="fas fa-pencil-alt"></i></button>
-            </div>
+              <!-- Username -->
+              <div class="d-flex align-items-center mb-3">
+                <label for="username" class="form-label w-25">Username</label>
+                <div class="input-group">
+                  <input type="text" id="username" name="username" class="form-control" value="{{profile.Username}}" disabled>
+                  <button type="button" class="btn edit-btn ms-2" onclick="enableField('username')">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                </div>
+              </div>
 
             <!-- Birthdate -->
             <div class="d-flex align-items-center mb-3">
-              <label class="form-label w-25">Birthdate</label>
-              <input type="text" class="form-control w-50" value="{{profile.Birthdate}}" disabled>
+              <label for="birthdate" class="form-label w-25">Birthdate</label>
+              <input type="date" id="birthdate" name="birthdate" class="form-control w-25" value="{{profile.Birthdate}}" disabled>
             </div>
 
             <!-- Department -->
             <div class="d-flex align-items-center mb-3">
-              <label class="form-label w-25">Department</label>
-              <input type="text" class="form-control w-50" value="{{profile.DepartmentName}}" disabled>
+              <label for="department" class="form-label w-25">Department</label>
+              <input type="text" id="department" name="department" class="form-control w-25" value="{{profile.DepartmentName}}" disabled>
             </div>
 
             <!-- Hire Date -->
             <div class="d-flex align-items-center mb-3">
               <label class="form-label w-25">Hire Date</label>
-              <input type="text" class="form-control w-50" value="{{profile.HireDate}}" disabled>
+              <input type="text" class="form-control w-25" value="{{profile.HireDate}}" disabled>
             </div>
 
             <!-- Save Button -->
             <button type="submit" class="save-btn">Save Changes</button>
           </form>
+                    
         </div>
       </main>
     </div>
   </div>
 
-  <!-- Optional Logout Modal -->
+  <!-- Logout Modal -->
   <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -296,17 +309,18 @@
       document.getElementById(fieldId).disabled = false;
     }
 
+    document.getElementById('profileForm').addEventListener('submit', () => {
+      document.querySelectorAll('#profileForm input').forEach(input => input.disabled = false);
+    });
+
     function showLogoutModal() {
       var logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
       logoutModal.show();
     }
 
     function logout() {
-      // Implement logout logic
       console.log('User logged out');
-      
-      // Redirect to the landing page
-      window.location.href = '/'; // Adjust the URL as needed for your landing page
+      window.location.href = '/login';
     }
   </script>
 

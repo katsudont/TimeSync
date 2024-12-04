@@ -34,30 +34,33 @@ class ProfileController extends BaseController
 
     public function update()
     {
-        // Start session (only once)
-        session_start();
+    session_start();
 
-        // Check if the user is logged in
-        if (!isset($_SESSION['is_logged_in']) || !$_SESSION['is_logged_in']) {
-            header('Location: /login');
-            exit;
+    if (!isset($_SESSION['is_logged_in']) || !$_SESSION['is_logged_in']) {
+        header('Location: /login');
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $userId = $_SESSION['user_id'];
+        $name = $_POST['name'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $username = $_POST['username'] ?? '';
+        $birthdate = $_POST['birthdate'] ?? '';
+
+        error_log("Updating profile for user ID: $userId with Name: $name, Email: $email"); // Debug log
+
+        $userModel = new User();
+        $result = $userModel->updateProfile($userId, $name, $email, $username, $birthdate);
+
+        if ($result) {
+            error_log("Profile updated successfully."); // Debug success
+        } else {
+            error_log("Failed to update profile."); // Debug failure
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $userId = $_SESSION['user_id'];
-            $name = $_POST['name'] ?? '';
-            $email = $_POST['email'] ?? '';
-            $username = $_POST['username'] ?? '';
-            $birthdate = $_POST['birthdate'] ?? '';
-
-            // Initialize the User model
-            $userModel = new User();
-
-            // Update profile
-            $userModel->updateProfile($userId, $name, $email, $username, $birthdate);
-
-            header('Location: /profile');
-            exit;
-        }
+        header('Location: /profile');
+        exit;
+    }
     }
 }
