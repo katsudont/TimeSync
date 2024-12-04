@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Dashboard - TimeSync</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
     <style>
         body {
-            background: linear-gradient(to bottom, #0A1128, #1d2d3b); /* Gradient background: navbar dark, fading to lighter */
+            background: #ffffff; /* Gradient background: navbar dark, fading to lighter */
             display: flex;
             flex-direction: column;
-            color: #ffffff; /* Light text color */
+            color: #0A1128; /* Light text color */
         }
         .container {
             margin-top: 30px;
@@ -27,8 +29,8 @@
         }
         footer {
             text-align: center;
-            margin-top: 441px;
-            color: #dddddd;
+            margin-top: 100px;
+            color: #0A1128;
         }
         .logout-btn {
             background-color: #dc3545;
@@ -111,6 +113,14 @@
         .table-striped tbody tr:nth-child(odd) {
             background-color: #e9ecef; /* Lighter row stripe */
         }
+
+        .pagination {
+            justify-content: center;
+        }
+
+        .search-input {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -139,12 +149,12 @@
 
     <div class="container">
         <header>
-            <h1 class="text-center text-white">Welcome to TimeSync, {{username}}</h1>
+            <h1 class="text-center">Welcome to TimeSync, {{username}}</h1>
         </header>
 
         <!-- Employee Dashboard Content -->
         <section class="dashboard">
-            <h2 class="text-center text-white">Your Attendance</h2>
+            <h2 class="text-center">Your Attendance</h2>
 
             <!-- Clock In/Out Buttons -->
             <div class="clock-buttons text-center mb-4">
@@ -156,10 +166,12 @@
                 </form>
             </div>
 
-            <!-- Attendance Table -->
+            <!-- Attendance Table with DataTable -->
             <div class="attendance-info">
-                <h3 class="text-center text-white">Attendance Records</h3>
-                <table class="table table-bordered table-hover table-striped">
+                <h3 class="text-center">Attendance Records</h3>
+
+                <!-- DataTable -->
+                <table id="attendanceTable" class="table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
                             <th scope="col">Shift ID</th>
@@ -194,6 +206,22 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+
+    <!-- Initialize DataTable -->
+    <script>
+        $(document).ready(function() {
+            $('#attendanceTable').DataTable({
+                "paging": true,       // Enable pagination
+                "searching": true,    // Enable search
+                "ordering": true,     // Enable sorting
+                "lengthChange": false // Disable length change (number of rows per page)
+            });
+        });
+    </script>
+
     <!-- Logout Modal -->
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -207,18 +235,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+                    <a href="/login" class="btn btn-danger">Log Out</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Logout Script -->
-    <script>
-        function logout() {
-            // Redirect to the logout route (adjust the URL according to your backend)
-            window.location.href = '/login';
-        }
-    </script>
 </body>
 </html>
