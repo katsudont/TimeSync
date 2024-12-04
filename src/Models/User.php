@@ -20,21 +20,22 @@ class User extends BaseModel
 }
 
 public function login($username, $password)
-    {
-        $query = "SELECT u.ID as id, u.Username as username, u.Password as password, u.RoleID as role_id 
-                  FROM User u
-                  WHERE u.Username = :username";
+{
+    $query = "SELECT u.ID as id, u.Username as username, u.Password as password, u.RoleID as role_id 
+              FROM User u
+              WHERE u.Username = :username";
 
-        $stmt = $this->db->prepare($query);
-        $stmt->execute(['username' => $username]);
-        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+    $stmt = $this->db->prepare($query);
+    $stmt->execute(['username' => $username]);
+    $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        // Verify password
-        if ($user && password_verify($password, $user['password'])) {
-            return $user; // Return user details if password matches
-        }
-        return false; // Login failed
+    // Verify password
+    if ($user && password_verify($password, $user['password'])) {
+        return $user; // Return user details if password matches
     }
+    return false; // Login failed
+}
+
 
     // Count admin users
     public function countAdmins()
