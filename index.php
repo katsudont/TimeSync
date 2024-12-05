@@ -31,8 +31,11 @@ try {
     $router->get('/profile', '\App\Controllers\ProfileController@index');
     $router->post('/profile/update', '\App\Controllers\ProfileController@update');
 
+    // Route to display employee list or dashboard
     $router->get('/employee', '\App\Controllers\EmployeeController@index');
 
+    // Route to process adding a new employee
+    $router->post('/employee', '\App\Controllers\EmployeeDashboardController@addEmployee');
 
     // Display the Admin Dashboard (List of Admin employees)
     $router->get('/admin', '\App\Controllers\AdminController@index');

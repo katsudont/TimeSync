@@ -59,5 +59,27 @@ public function countAll()
      return $stmt->fetchAll();
  }
 
+ public function getEmployeeById($employeeId)
+{
+    $query = "
+        SELECT 
+            e.ID as EmployeeID, 
+            e.Name, 
+            e.Email, 
+            u.Username, 
+            e.Birthdate, 
+            e.HireDate, 
+            d.DepartmentName, 
+            e.DepartmentID
+        FROM Employee e
+        JOIN Department d ON e.DepartmentID = d.ID
+        JOIN User u ON u.EmployeeID = e.ID
+        WHERE e.ID = :EmployeeID
+    ";
+
+    $stmt = $this->db->prepare($query);
+    $stmt->execute(['EmployeeID' => $employeeId]);
+    return $stmt->fetch(); // Fetch a single row
+}
 
 }
